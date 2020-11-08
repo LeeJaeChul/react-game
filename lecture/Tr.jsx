@@ -1,23 +1,16 @@
-import React, { useRef, useEffect, memo, useMemo } from 'react';
+import React, { useContext, memo } from 'react';
 import Td from './Td';
+import { TableContext } from './MineSearch';
 
-const Tr = memo(( { rowData, rowIndex, dispatch }) => {
-
-    const ref = useRef([]);
-    useEffect(() => {
-        console.log(rowData === ref.current[0], dispatch === ref.current[1], rowIndex === ref.current[2]);
-        ref.current = [rowData, dispatch, rowIndex];
-    }, [rowData, dispatch, rowIndex]);
-        
-    return (
-        <tr>
-            {Array(rowData.length).fill().map((td, i) => (
-                useMemo(() => <Td key={i} dispatch={dispatch} rowIndex={rowIndex} cellIndex={i} cellData={rowData[i]}>{''}</Td>, 
-                [rowData[i]]
-                ) //component도  기억할 수 있음  (useMemo)
-            ))}
-        </tr>
-    );
+const Tr = memo(({ rowIndex }) => {
+  const { tableData } = useContext(TableContext);
+  return (
+    <tr>
+      {tableData[0] && Array(tableData[0].length).fill().map((td, i) =>
+        <Td rowIndex={rowIndex} cellIndex={i} />
+      )}
+    </tr>
+  )
 });
 
 export default Tr;
